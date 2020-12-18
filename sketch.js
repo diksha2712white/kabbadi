@@ -13,8 +13,8 @@ function preload (){
 function setup(){
     database=firebase.database();
     createCanvas(600,600);
-    player1=createSprite(300,250,10,10);
-    player1.shapeColor="red";
+    player1=createSprite(150,250,10,10);
+    
     player1.addAnimation("walking",p1animation);
     p1animation.frameDelay=200;
     player1.scale=0.5;
@@ -25,11 +25,11 @@ function setup(){
 var player1Position=database.ref('player1/position')
 player1Position.on("value",readPosition,showError)
 
-player2=createSprite(300,250,10,10);
-player2.shapeColor="red";
+player2=createSprite(450,250,10,10);
+
 player2.addAnimation("walking2",p2animation);
 p2animation.frameDelay=200;
-player2.scale=0.5;
+player2.scale=-0.5;
 player2.setCollider("circle",0,0,60)
 player2.debug=true;
 
@@ -37,7 +37,7 @@ player2.debug=true;
 var player2Position=database.ref('player2/position')
 player2Position.on("value",readPosition2,showError)
 
-gameState=database.ref("gmeState/");
+gameState=database.ref("gameState/");
 gameState.on("value",readGS,showError);
 player1Score=database.ref("player1Score/");
 player1Score.on("value",readScore1,showError);
@@ -49,10 +49,19 @@ player2Score.on("value",readScore2,showError);
 }
 function draw(){
 background("white");
+
 if(gameState===0){
     text ("press space to start toss",100,200);
 
     if(keyDown("space")){
+        database.ref('player1/position').update({
+            x:150,
+            y:300
+        })
+        database.ref("player2/position").update({
+            x:450,
+            y:300
+        })
         rand=Math.round(random(1,2));
         if(rand===1){
             database.ref('/').update({
@@ -66,14 +75,7 @@ if(gameState===0){
             })
             alert ("yellow ride")
         }
-        database.ref('player1/position').update({
-            x:150,
-            y:300
-        })
-        database.ref("player2/position").update({
-            x:450,
-            y:300
-        })
+        
     }
 }
 
@@ -81,36 +83,37 @@ if (gameState===1){
     if(keyDown(LEFT_ARROW)){
         writePosition(-5,0);
     }
-    if(keyDown(RIGHT_ARROW)){
+    else if(keyDown(RIGHT_ARROW)){
         writePosition(5,0)
     }
-    if(keyDown(UP_ARROW)){
+    else if(keyDown(UP_ARROW)){
         writePosition(0,-5);
     }
-    if(keyDown(DOWN_ARROW)){
+    else if(keyDown(DOWN_ARROW)){
         writePosition(0,5);
     }
-    if(keyDown("w")){
+    else if(keyDown("w")){
         writePosition2(0,-5);
     }
-    if(keyDown("s")){
+    else if(keyDown("s")){
         writePosition2(0,5);
     }
 
     if(player1.x>500){
         database.ref('/').update({
-            player1Score:player1Score-5,
-            player2Scoore:player2Score+5,
-            gameState:0
+            gameState:0,
+            player1Score:player1Score+5,
+            player2Score:player2Score-5,
+           
         })
-        alert("RED WON")
+      alert("RED WON")
     }
     if(player1.isTouching(player2)){
         database.ref('/').update({
             gameState:0,
-            player1Score:player1Score+5,
-            player2Score:player2Score-5,
-            gameState:0
+            player1Score:player1Score-5,
+            player2Score:player2Score+5,
+            
         })
         alert("red lost");
     
@@ -123,13 +126,13 @@ if (gameState===1){
         if(keyDown("a")){
             writePosition2(-5,0);
         }
-        else if(keyDown("s")){
+        else if(keyDown("d")){
             writePosition2(5,0)
         }
         else if(keyDown("w")){
             writePosition2(0,-5)
         }
-        else if(keyDown("d")){
+        else if(keyDown("s")){
             writePosition2(0,5)
         }
         else if(keyDown("UP_ARROW")){
@@ -140,19 +143,20 @@ if (gameState===1){
         }
         if(player2.x<150){
             database.ref('/').update({
-                player1Score:player1Score+5,
-                player2Score:player2Score-5,
-                gameState:0
+                gameState:0,
+                player1Score:player1Score-5,
+                player2Score:player2Score+5,
+                
             })
             alert("yellow won")
         }
 
-if(player1.isTouching(player2)){
+if(player2.isTouching(player1)){
     database.ref('/').update({
         gameState:0,
-        player1Score:player1Score-5,
-        player2Score:player2Score+5,
-        gameState:0
+        player1Score:player1Score+5,
+        player2Score:player2Score-5,
+        
     })
     alert("Yellow lost");
 
@@ -188,12 +192,12 @@ function writePosition2(x,y){
 function readPosition(data){
     position=data.val();
     player1.x=position.x,
-    player1.x=position.y
+    player1.y=position.y
 }
-function readPosition2(data){
-    position2=data.val();
+function readPosition2(data1){
+    position2=data1.val();
     player2.x=position2.x,
-    player2.x=position2.y
+    player2.y=position2.y
 }
 function readGS(data){
 gameState=data.val();
