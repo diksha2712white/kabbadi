@@ -3,7 +3,7 @@
 var player1,database;
 var position,position2,player2,p1animation,p2animation;
 var player1Score,player2Score
-var gameState=0;
+var gameState;
 
 function preload (){
     p1animation=loadAnimation("assests/player1a.png","assests/player1b.png","assests/player1a.png")
@@ -52,7 +52,7 @@ background("white");
 
 if(gameState===0){
     textAlign(CENTER)
-    text ("press space to start toss",300,300);
+    text ("press space to start toss",300,100);
 
     if(keyDown("space")){
         database.ref('player1/position').update({
@@ -85,36 +85,36 @@ if (gameState===1){
         writePosition(-5,0);
     }
     else if(keyDown(RIGHT_ARROW)){
-        writePosition(5,0)
+        writePosition(+5,0)
     }
     else if(keyDown(UP_ARROW)){
         writePosition(0,-5);
     }
     else if(keyDown(DOWN_ARROW)){
-        writePosition(0,5);
+        writePosition(0,+5);
     }
     else if(keyDown("w")){
         writePosition2(0,-5);
     }
     else if(keyDown("s")){
-        writePosition2(0,5);
+        writePosition2(0,+5);
     }
 
     if(player1.x>500){
         database.ref('/').update({
-            gameState:0,
-            player1Score:player1Score+5,
-            player2Score:player2Score-5,
-           
+            
+            'player1Score':player1Score+5,
+            'player2Score':player2Score-5,
+           'gameState':0,
         })
       alert("RED WON")
     }
     if(player1.isTouching(player2)){
         database.ref('/').update({
-            gameState:0,
+            
             player1Score:player1Score-5,
             player2Score:player2Score+5,
-            
+            gameState:0
         })
         alert("red lost");
     
