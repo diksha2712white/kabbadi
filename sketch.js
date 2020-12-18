@@ -51,7 +51,8 @@ function draw(){
 background("white");
 
 if(gameState===0){
-    text ("press space to start toss",100,200);
+    textAlign(CENTER)
+    text ("press space to start toss",300,300);
 
     if(keyDown("space")){
         database.ref('player1/position').update({
