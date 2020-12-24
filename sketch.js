@@ -70,36 +70,36 @@ if(gameState===0){
             database.ref('/').update({
                 gameState:1
             })
-            console.log("red ride ")
+            alert("red ride ")
         }
         if(rand===2){
             database.ref('/').update({
                 gameState:2
             })
-            console.log("yellow ride")
+            alert("yellow ride")
         }
         
     }
 }
 
 if (gameState===1){
-    if(keyDown(LEFT_ARROW)){
-        writePosition(-5,0);
+    if(keyWentDown(LEFT_ARROW)){
+        writePosition(-25,0);
     }
-    else if(keyDown(RIGHT_ARROW)){
-        writePosition(5,0)
+    else if(keyWentDown(RIGHT_ARROW)){
+        writePosition(25,0)
     }
-    else if(keyDown(UP_ARROW)){
-        writePosition(0,-5);
+    else if(keyWentDown(UP_ARROW)){
+        writePosition(0,-25);
     }
-    else if(keyDown(DOWN_ARROW)){
-        writePosition(0,5);
+    else if(keyWentDown(DOWN_ARROW)){
+        writePosition(0,25);
     }
-    else if(keyDown("w")){
-        writePosition2(0,-5);
+    else if(keyWentDown("w")){
+        writePosition2(0,-25);
     }
-    else if(keyDown("s")){
-        writePosition2(0,5);
+    else if(keyWentDown("s")){
+        writePosition2(0,25);
     }
 
     if(player1.x>500){
@@ -110,7 +110,7 @@ if (gameState===1){
            
         })
         gameState=0;
-      console.log("RED WON")
+      alert("RED WON")
     }
     if(player1.isTouching(player2)){
         database.ref('/').update({
@@ -119,7 +119,7 @@ if (gameState===1){
             player2Score:player2Score+5,
             
         })
-        console.log("red lost");
+        alert("red lost");
         gameState=0;
     
         }
@@ -128,23 +128,23 @@ if (gameState===1){
 
 
     if(gameState===2){
-        if(keyDown("a")){
-            writePosition2(-5,0);
+        if(keyWentDown("a")){
+            writePosition2(-25,0);
         }
-        else if(keyDown("d")){
-            writePosition2(5,0)
+        else if(keyWentDown("d")){
+            writePosition2(25,0)
         }
-        else if(keyDown("w")){
-            writePosition2(0,-5)
+        else if(keyWentDown("w")){
+            writePosition2(0,-25)
         }
-        else if(keyDown("s")){
-            writePosition2(0,5)
+        else if(keyWentDown("s")){
+            writePosition2(0,25)
         }
-        else if(keyDown("UP_ARROW")){
-            writePosition(0,-5)
+        else if(keyWentDown("UP_ARROW")){
+            writePosition(0,-25)
         }
-        else if(keyDown("DOWN_ARROW")){
-            writePosition(0,5)
+        else if(keyWentDown("DOWN_ARROW")){
+            writePosition(0,25)
         }
         if(player2.x<150){
             database.ref('/').update({
@@ -153,7 +153,7 @@ if (gameState===1){
                 player2Score:player2Score+5,
                 
             })
-            console.log("yellow won")
+            alert("yellow won")
             gameState=0;
         }
 
@@ -164,7 +164,7 @@ if(player2.isTouching(player1)){
         player2Score:player2Score-5,
         
     })
-    console.log("Yellow lost");
+    alert("Yellow lost");
     gameState=0;
 
     }
